@@ -84,16 +84,16 @@ const userSchema = new mongoose.Schema({
             fullName: this.fullName,
             email: this.email
         }
-        const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ASSESS_TOKEN_EXPIRY });
+        const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRY });
         return token;
       }
 
       // Method to generate refresh token
       userSchema.methods.generateRefreshToken = function () {
         const payload = {
-            _id: this._id,
+            _id: this._id,  
         }
-        const token = jwt.sign(payload, process.env.REFRESH_TOKEN_SERCRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY });
+        const token = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRY });
         return token;
       }
 
