@@ -8,7 +8,7 @@ const videoSchema = new mongoose.Schema(
             type: String, // cloudinary url
             required: [true, "Video is required"],
         },
-        tumbnail: {
+        thumbnail: {
             type: String, // cloudinary url
             required: true,
         },
@@ -54,24 +54,24 @@ const videoSchema = new mongoose.Schema(
 );
 
         //Method to add like
-videoSchema.methods.addlike = async function () {
-    this.likes += 1
-    return await this.save();
-}
+// videoSchema.methods.addlike = async function () {
+//     this.likes += 1
+//     return await this.save();
+// }
 
-        // Method to add dislike
-videoSchema.methods.addDislike = async function () {
-    if (this.likes > 0) {
-        this.likes -= 1
-    }
-    return await this.save();
-}
+//         // Method to add dislike
+// videoSchema.methods.addDislike = async function () {
+//     if (this.likes > 0) {
+//         this.likes -= 1
+//     }
+//     return await this.save();
+// }
 
-        // Method to add view
-videoSchema.methods.addView = async function () {
-    this.views += 1
-    return await this.save();
-}
+//         // Method to add view
+// videoSchema.methods.addView = async function () {
+//     this.views += 1
+//     return await this.save();
+// }
 
 videoSchema.plugin(mongooseAggregatePaginate);
 

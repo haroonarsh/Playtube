@@ -6,6 +6,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 import mongoose from "mongoose";
+import { Video } from "../models/video.model.js"
 
         // code to generate access token and refresh token for user
         // and save refresh token in db
@@ -162,8 +163,8 @@ const logoutUser = asyncHandler( async (req, res) => {
     await User.findByIdAndUpdate(
         req.user._id,
         {
-            $set: {
-                refreshToken: undefined
+            $unset: {
+                refreshToken: 1
             }
         },
         {
@@ -240,7 +241,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
         throw new ApiError(400, "User not Found")
     }
 
-    const isPasswordCurrect = await user.isPasswordCurrect(oldPassword)
+    const isPasswordCurrect = await user.comparePassword(oldPassword)
     if (!isPasswordCurrect) {
         throw new ApiError(401, "Current password is incorrect");
     }
@@ -472,5 +473,39 @@ const getWatshHistory = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, user[0].watchHistory, "Watch history fetched successfully."))
 })
+
+// const uploadVideo = asyncHandler(async (req, res) => {
+//     const videoLocalPath = req.file?.path;
+
+//     if (!videoLocalPath) {
+//         throw new ApiError(400, "Video is missing")
+//     }
+
+//     const video = await uploadOnCloudinary(videoLocalPath)
+
+//     if (!video.url) {
+//         throw new ApiError(400, "Error while uploading a video.")
+//     }
+
+//     const videoUploaded = await Video.findByIdAndUpdate(
+//         req.user?._id,
+//         {
+//             $push: {
+//                 videoFile: video.url
+//             }
+//         },
+//         {
+//             new: true
+//         }
+//     ).select("-password")
+
+//     if (!videoUploaded.videoFile) {
+//         throw new ApiError(400, "something wrong while uploading video")
+//     }
+
+//     return res
+//     .status(200)
+//     .json(new ApiResponse(200, videoUploaded, "Video uploaded successfully."))
+// })
 
 export { registerUser, loginUser, logoutUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage, getUserChannelProfile, getWatshHistory };
