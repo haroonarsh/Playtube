@@ -8,7 +8,6 @@ function ForgotPassword() {
   as="image"
   href="https://images.pexels.com/photos/1144275/pexels-photo-1144275.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" />
 <div class="min-h-screen bg-[#121212]">
-  <header class="fixed top-0 z-10 mx-auto w-full max-w-full bg-[#121212] p-6 text-white lg:px-10"><h1>DevUI</h1></header>
   <div class="mx-auto flex w-full items-stretch justify-between gap-10">
     <div class="mt-20 flex w-full flex-col items-start justify-start p-6 md:w-1/2 lg:px-10">
       <div class="w-full">
