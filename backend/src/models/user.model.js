@@ -9,32 +9,32 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-        minlength: [3, "Name must be atleast 3 characters"],
+        // minlength: [3, "Name must be atleast 3 characters"],
     },
     fullName: {
         type: String,
         required: true,
-        trim: true,
-        index: true
+        // trim: true,
+        // index: true
     },
     email: {
         type: String,
         required: true,
-        trim: true,
+        // trim: true,
         unique: true
     },
     password: {
         type: String,
         required: [true, "Password is required"],
-        minlength: [6, "Password must be atleast 6 characters"]
+        // minlength: [6, "Password must be atleast 6 characters"]
     },
-    avatar: {
-        type: String, // cloudinary url
-        required: true
-    },
-    coverImage: {
-        type: String, // cloudinary url
-    },
+    // avatar: {
+    //     type: String, // cloudinary url
+    //     required: true
+    // },
+    // coverImage: {
+    //     type: String, // cloudinary url
+    // },
     watchHistory:[
         {
             type: Schema.Types.ObjectId,
