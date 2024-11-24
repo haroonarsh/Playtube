@@ -1,43 +1,54 @@
 import axios from 'axios';
 import React, { useEffect } from 'react'
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
+// import { setUser } from '../../store/userSlice';
 
 function LoginPage() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  // const dispatch = useDispatch();
   
   
   const handleLogin = async (e) => {
     e.preventDefault();
-    axios.post('/api/v1/users/login', { email, password })
-    .then(response => {
-        // Handle successful login response
-        console.log(response.data);
-        if (response.data.message === 'User logged in successfully') {
-          toast.success("User logged in successfully !", {
-            position: "top-center"
-          })
-          navigate('/home'); // Navigate to homepage if login is successful
-      }
-        setEmail('');
-        setPassword('');
+    try {
+      const { data } = await axios.post('/api/v1/users/login', { email, password })
+      toast.success("User logged in successfully !", {
+        position: "top-center"
+      })
+      console.log("User logged in successfully", data);
+      
+      // console.log("Check user ", data.data.user);
+      
+      // save token and user data in local storage
+      localStorage.setItem('accessToken', data.data.accessToken);
+      localStorage.setItem('refreshToken', data.data.refreshToken);
+      localStorage.setItem('user', JSON.stringify( data.data.user ));
 
-    })
-    .catch(error => {
-        // Handle login error
-        console.error("user not found");
-        toast.error("User not found !", {
-          position: "top-center"
-        })
-        setEmail('');
-        setPassword('');
-      });
-  }
+      setEmail('');
+      setPassword('');
+      navigate('/home');
+      
+          
+          // dispatch login success action
+      // dispatch(setUser( data.user ));
+
+    } catch (error) {
+      // Handle login error
+      // console.error("user not found");
+      toast.error("User not found !", {
+        position: "top-center"
+      })
+      setEmail('');
+      setPassword('');
+    }
+  };
 
   return (
     <>
@@ -177,4 +188,4 @@ function LoginPage() {
   )
 }
 
-export default LoginPage
+export default LoginPage;

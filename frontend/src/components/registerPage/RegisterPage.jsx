@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+// import { useDispatch } from 'react-redux';
+import { setUser } from '../../store/userSlice';
 
 function RegisterPage() {
 
@@ -11,34 +13,89 @@ function RegisterPage() {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [fullName, setFullName] = useState('');
+  const [avatar, setAvatar] = useState(null);
+  const [coverImage, setCoverImage] = useState(null);
+  // const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
-  const hanldeData = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post('/api/v1/users/register', { email, password, username, fullName})
-      .then(response => {
-          // Handle successful login response
-          console.log("user registered", response.data);
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    if (name === 'avatar') {
+      setAvatar(files[0]); // Store the file object
+    } else if (name === 'coverImage') {
+      setCoverImage(files[0]);  // Store the file object
+    }
+  };
 
-          if (response.data.message === 'User registered successfully') {
-            toast.success("User registered successfully !", {
-              position: "top-center"
-            })
-            navigate('/home'); // Navigate to homepage if login is successful
-            console.log("User registered in successfully");
-            
-        }
-      })
-    } catch (error) {
-      toast.error("Something went wrong !", {
+  const handleData = async (e) => {
+    e.preventDefault();
+
+    if (!avatar) {
+      toast.error("avatar is required!", {
+        position: "top-center"
+      });
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('username', username);
+    formData.append('fullName', fullName);
+    formData.append('avatar', avatar);
+
+    if (coverImage) formData.append('coverImage', coverImage);
+     
+    try {
+      const { data } = await axios.post('/api/v1/users/register', formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      toast.success("User registered successfully !", {
         position: "top-center"
       })
-      console.log("Something went wrong");
-      
+      console.log("User registered in successfully", data);
+
+      // save token and user data in local storage
+      localStorage.setItem('accessToken', data.data.accessToken);
+      localStorage.setItem('refreshToken', data.data.refreshToken);
+      localStorage.setItem('user', JSON.stringify( data.data.user ));
+
+      // dispatch(setUser(response.data.user))
+      navigate('/home'); // Navigate to homepage if login is successful
+
+    } catch (error) {
+      console.error("Error during registeration", error.response?.data || error);
+      toast.success(error.response?.data || "Something went wrong!", {
+        position: "top-center"
+      })
     }
   }
+
+
+  
+  // const hanldeData = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.post('/api/v1/users/register', { email, password, username, fullName, avatar, coverImage });
+  //         // Handle successful login response
+  //         console.log("user registered", response.data);
+
+  //         toast.success("User registered successfully !", {
+  //           position: "top-center"
+  //         })
+  //         navigate('/home'); // Navigate to homepage if login is successful
+  //         console.log("User registered in successfully");
+            
+  //   } catch (error) {
+  //     toast.error("Something went wrong !", {
+  //       position: "top-center"
+  //     })
+  //     console.log("Something went wrong");
+      
+  //   }
+  // }
 
   // const handleSubmit = async (e) => {
   //   e.preventDefault()
@@ -80,7 +137,9 @@ function RegisterPage() {
             autoComplete="false"
             className="w-full border-[1px] border-white bg-black p-4 text-white placeholder:text-gray-500" 
             value={fullName}
-            onChange={(e) => setFullName(e.target.value)}/>
+            onChange={(e) => setFullName(e.target.value)}
+            required
+            />
         </div>
         <div className="flex w-full flex-col items-start justify-start gap-2">
           <label className="text-xs text-slate-200">Username</label>
@@ -90,6 +149,7 @@ function RegisterPage() {
             className="w-full border-[1px] border-white bg-black p-4 text-white placeholder:text-gray-500" 
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            required
             />
         </div>
         <div className="flex w-full flex-col items-start justify-start gap-2">
@@ -99,7 +159,9 @@ function RegisterPage() {
             autoComplete="false"
             className="w-full border-[1px] border-white bg-black p-4 text-white placeholder:text-gray-500" 
             value={email}
-            onChange={(e) => setEmail(e.target.value)}/>
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            />
         </div>
         <div className="flex w-full flex-col items-start justify-start gap-2">
           <label className="text-xs text-slate-200">Password</label>
@@ -109,7 +171,26 @@ function RegisterPage() {
             type="password"
             className="w-full border-[1px] border-white bg-black p-4 text-white placeholder:text-gray-500" 
             value={password}
-            onChange={(e) => setPassword(e.target.value)}/>
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            />
+        </div>
+        <div className="flex w-full flex-col items-start justify-start gap-2">
+          <label className="text-xs text-slate-200">Avatar</label>
+          <input
+            type="file"
+            name='avatar'
+            className="w-full border-[1px] border-white bg-black p-4 text-white placeholder:text-gray-500" 
+            onChange={handleFileChange}/>
+        </div>
+        <div className="flex w-full flex-col items-start justify-start gap-2">
+          <label className="text-xs text-slate-200">coverImage</label>
+          <input
+            type="file"
+            name='coverImage'
+            className="w-full border-[1px] border-white bg-black p-4 text-white placeholder:text-gray-500" 
+            onChange={handleFileChange}
+            />
         </div>
         <div className="mr-4 flex items-center">
           <input
@@ -179,7 +260,7 @@ function RegisterPage() {
         </div>
         <button
           className="w-full bg-[#ae7aff] p-3 text-center font-bold text-black shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e]"
-          onClick={hanldeData}
+          onClick={handleData}
           >
           Create Account
         </button>

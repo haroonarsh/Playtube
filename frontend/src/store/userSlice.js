@@ -1,38 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { data } from "@remix-run/router";
+import { createSlice } from "@reduxjs/toolkit"
+
 
 const initialState = {
-    data: [],
-    loading: false,
-    error: null,
-};
+  user: null,
+  isAuthenticated: false,
+}
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    loginStart: (state) => {
-      state.loading = true;
+    setUser: (state, action) => {
+      state.user = action.payload;
+      state.isAuthenticated = true;
     },
-    loginSuccess: (state, action) => {
-      state.loading = false;
-      state.data = action.payload;
+    clearUser: (state) => {
+      state.user = null;
+      state.isAuthenticated = false;
     },
-    loginFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    addData: (state, action) => {
-      state.data = [...state.data, ...action.payload];
-    },
-    logout: (state) => {
-      state.data = null;
-      state.loading = false;
-      state.error = null;
-    },
-  }  
-})
+  },
+});
 
-export const { loginStart, loginSuccess, loginFailure, addData, logout } = userSlice.actions;
+export const  { setUser, clearUser } = userSlice.actions;
 
 export default userSlice.reducer;

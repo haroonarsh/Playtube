@@ -1,37 +1,35 @@
 import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { loginStart, loginSuccess, loginFailure, logout, addData } from '../../store/userSlice';
+// import { useSelector } from 'react-redux';
 
 function VideoListCardViewPage() {
 
+  const [user, setUser] = useState(null);
   const [isVisible, setVisible] = useState(false);
-  // const dispatch = useDispatch();
-  // const { data = [], loading = false, error = null } = useSelector((state) => state.user || {});
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     dispatch(loginStart());
-  //     try {
-  //       const response = await axios.post('/api/v1/users')
-  //       const data = response.data;
-  //       dispatch(loginSuccess(data));
-  //       dispatch(addData(data));
-  //       console.log("user data", data);
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+      try {
+        const parentUser = JSON.parse(storedUser);
+        // console.log("parentUser", parentUser);
         
-  //     } catch (error) {
-  //       console.log("User not found", );
-        
-  //     }
-  //   }
+        setUser(parentUser);
+      } catch (error) {
+        console.log("Error parsing user data:", error);
+        localStorage.removeItem('user');
+      }
+  }, [])
 
-  //   fetchData();
-  //   const interValid = setInterval(fetchData, 60000); // Fetch data every 60 seconds
-
-  //   return () => clearInterval(interValid);
-  // }, [dispatch]);
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    if (user === null) {
+      console.log("user is null");
+    }
+  };
 
   const toggleVisibility = () => {
     setVisible(!isVisible);
@@ -122,29 +120,38 @@ function VideoListCardViewPage() {
 </div>
 
 
-<img id="avatarButton" type="button" dara-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" className="w-10 h-10 rounded-full cursor-pointer" src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"  
+<img id="avatarButton" type="button" dara-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start" className="w-10 h-10 rounded-full cursor-pointer" src={ user ? user.avatar : "https://flowbite.com/docs/images/people/profile-picture-3.jpg"}  
 onClick={toggleVisibility}
 />
 
 {/* <!-- Dropdown menu --> */}
 <div id="userDropdown" className={`z-10 absolute right-2 top-16 mt-2 bg-white divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600 ${isVisible ? "" : "hidden"}`}>
-    <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-      <div>Bonnie Green</div>
-      <div className="font-medium truncate">name@flowbite.com</div>
+    {user ? (
+      <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
+      <div>{user.fullName}</div>
+      <div className="font-medium truncate">{user.email}</div>
     </div>
+    ) : (
+      <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
+      <div>Haroon khan</div>
+      <div className="font-medium truncate">fsdasdada@gmail.com</div>
+    </div>
+    )}
     <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
-      <Link to='/home/channel'>
-        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+      <Link to='/home/channel'className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+        Dashboard
       </Link>
-      <li>
-        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>
-      </li>
-      <li>
-        <a href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-      </li>
+      <Link to='/home/channel' className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+        Settings
+      </Link>
+      <Link to='/home/channel' className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+        Earnings
+      </Link>
     </ul>
-    <Link to='/' className="py-1">
-      <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white" >Sign out</a>
+    <Link to='/' className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+    onClick={handleLogout}
+    >
+    Sign out
     </Link>
 </div>
 
@@ -215,7 +222,7 @@ onClick={toggleVisibility}
           </button>
         </li>
         <li className="">
-          <Link to='/history'
+          <Link to='/home/history'
             className="flex flex-col items-center justify-center border-white py-1 focus:text-[#ae7aff] sm:w-full sm:flex-row sm:border sm:p-1.5 sm:hover:bg-[#ae7aff] sm:hover:text-black sm:focus:border-[#ae7aff] sm:focus:bg-[#ae7aff] sm:focus:text-black sm:group-hover:justify-start sm:group-hover:px-4 lg:justify-start lg:px-4">
             <span className="inline-block w-5 shrink-0 sm:group-hover:mr-4 lg:mr-4">
               <svg

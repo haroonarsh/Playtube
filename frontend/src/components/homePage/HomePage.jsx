@@ -105,10 +105,10 @@ function HomePage() {
         {/* Content */}
         <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
-            Launch Your Journey Today
+            Welcome to the Future of Innovation
           </h1>
           <p className="text-xl sm:text-2xl text-gray-200 mb-12 max-w-2xl">
-            Join thousands of innovators who have already taken the first step towards their dreams.
+            PlayTube is the future of online learning, where you can learn from anywhere, at any time.
           </p>
           <Link to='/register' className="group bg-indigo-600 hover:bg-indigo-700 text-white text-lg px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 flex items-center space-x-2">
             <span>Register Now</span>

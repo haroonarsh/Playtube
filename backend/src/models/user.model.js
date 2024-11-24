@@ -28,13 +28,13 @@ const userSchema = new mongoose.Schema({
         required: [true, "Password is required"],
         // minlength: [6, "Password must be atleast 6 characters"]
     },
-    // avatar: {
-    //     type: String, // cloudinary url
-    //     required: true
-    // },
-    // coverImage: {
-    //     type: String, // cloudinary url
-    // },
+    avatar: {
+        type: String, // cloudinary url
+        required: true
+    },
+    coverImage: {
+        type: String, // cloudinary url
+    },
     watchHistory:[
         {
             type: Schema.Types.ObjectId,

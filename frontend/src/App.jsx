@@ -11,6 +11,14 @@ import EmptyPage from './components/MyChannel/EmptyPage';
 import UploadingModelPopup from './components/MyChannel/uploads/UploadingModelPopup';
 import UploadingVideomodelScrollPopup from './components/MyChannel/uploads/UploadingVideomodelScrollPopup';
 import UploadingSuccessModelPopup from './components/MyChannel/uploads/UploadingSuccessModelPopup';
+import Channeltweet from './components/tweetPages/Channeltweet';
+import MyEmptyTweet from './components/MyChannel/tweets/MyEmptyTweet';
+import EmptyPlayList from './components/channelPlayList/EmptyPlayList';
+import Subscribed from './components/subscribed/Subscribed';
+import EmptySubscribed from './components/subscribed/EmptySubscribed';
+// import { useDispatch } from 'react-redux';
+// import axios from 'axios';
+// import { setUser } from './store/userSlice';
 
               // Router
 // const router = createBrowserRouter([
@@ -64,13 +72,27 @@ import UploadingSuccessModelPopup from './components/MyChannel/uploads/Uploading
 // ])
 function App() {
 
-  const [data, setDate] = useState([]);
+  // const dispatch = useDispatch();
 
   // useEffect(() => {
-  //   async  function fetchData() {
-  //     const response = await fe('http://localhost:8000/api/v1/users')
+  //   const loadData = async () => {
+  //     const token = localStorage.getItem('token');
+  //     console.log("token", token);
+      
+  //     if (token) {
+  //       try {
+  //         const { data } = await axios.get('/api/v1/users/current-user', {
+  //           headers: { Authorization: `Bearer ${token}` }
+  //         });
+  //         console.log("Fetched user data", data);
+  //         dispatch(setUser(data))
+  //       } catch (error) {
+  //         console.log("Error fetching user", error.response?.data || error.message);
+  //       }
+  //     }
   //   }
-  // })
+  //   loadData();
+  // }, [dispatch]);
   
 
   return (
@@ -86,6 +108,10 @@ function App() {
       <Route path='/home/channel/upload' element={<UploadingModelPopup />} />
       <Route path='/home/channel/upload/uploading' element={<UploadingVideomodelScrollPopup />} />
       <Route path='/home/channel/upload/success' element={<UploadingSuccessModelPopup />} />
+      <Route path='/home/channel/tweet' element={<MyEmptyTweet />} />
+      <Route path='/home/channel/tweet/:id' element={<Channeltweet />} />
+      <Route path='/home/channel/playlist' element={<EmptyPlayList />} />
+      <Route path='/home/channel/subscribed' element={<Subscribed />} />
     </Routes>
    </BrowserRouter>
   )

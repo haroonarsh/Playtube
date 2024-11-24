@@ -1,26 +1,26 @@
 import { Router } from "express";
-import { logoutUser, loginUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage, getUserChannelProfile, getWatshHistory, register } from "../controllers/user.controller.js";
+import { logoutUser, loginUser, refreshAccessToken, changeCurrentPassword, getCurrentUser, updateAccountDetails, updateUserAvatar, updateUserCoverImage, getUserChannelProfile, getWatshHistory, registerUser } from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-// router.route("/register").post(
-//         // custom middleware
-//     upload.fields([
-//         {
-//             name: "avatar",
-//             maxCount: 1
-//         },
-//         {
-//             name: "coverImage",
-//             maxCount: 1
-//         }
-//     ]),
-//     registerUser);
+router.route("/register").post(
+        // custom middleware
+    upload.fields([
+        {
+            name: "avatar",
+            maxCount: 1
+        },
+        {
+            name: "coverImage",
+            maxCount: 1
+        }
+    ]),
+    registerUser);
 
 
-router.route("/register").post(register);
+// router.route("/register").post(register);
 router.route("/login").post(loginUser);
 
         // secured route
