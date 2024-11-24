@@ -5,8 +5,13 @@ import cookieParser from "cookie-parser";
 const app = express();
 
 app.use(cors({
-    origin: process.env.PORT.CORS_ORIGIN,
-    credentials: true
+    origin: "http://localhost:5173",
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+//     sameSite: "none",
+    optionsSuccessStatus: 200,
+    secure: true
+
 }))
 
 app.use(express.json({limit: "16kb"}))
