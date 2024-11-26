@@ -109,7 +109,7 @@ function App() {
       <Route path='/home/channel/upload/uploading' element={<UploadingVideomodelScrollPopup />} />
       <Route path='/home/channel/upload/success' element={<UploadingSuccessModelPopup />} />
       <Route path='/home/channel/tweet' element={<MyEmptyTweet />} />
-      <Route path='/home/channel/tweet/:id' element={<Channeltweet />} />
+      <Route path='/home/channel/tweet/:id' element={<MyEmptyTweet />} />
       <Route path='/home/channel/playlist' element={<EmptyPlayList />} />
       <Route path='/home/channel/subscribed' element={<Subscribed />} />
     </Routes>
